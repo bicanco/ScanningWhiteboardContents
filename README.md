@@ -1,6 +1,6 @@
 # Scanning Whiteboard Contents
-This is a project developed as the final project of the Digital Image Processing course(SCC0251) at the University of São Paulo (USP).
-## Students
+## This is a project developed as the final project of the Digital Image Processing course(SCC0251) at the University of São Paulo (USP).
+### Students
 * [David Souza Rodrigues](https://github.com/bicanco);
 * [Marcos Wendell Souza de Oliveira Santos](https://github.com/MarcosWendell);
 ### Abstract:
