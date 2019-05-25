@@ -11,8 +11,8 @@ This is a project developed as the final project of the Digital Image Processing
 ### Images Source
 * The application will be developed based on the images available on [the pantheon project website](https://clouard.users.greyc.fr/Pantheon/experiments/whiteboard-scanning/index-en.html), plus images captured by the students using black, blue, red and green markers while using flash on the camera.
 ### Digital Images Processing Techniques
-* Edges' detection;
-* Horizontal and Vertical lines' detection;
-* WhiteBoard's boundaries detection;
-* Image's Geometry correction;
-* Luminosity correction.
+* Edges' detection: Using the differential filter with a convolution operation;
+* Horizontal and Vertical lines' detection: A convolution with the proper filters may be used, as well as the Hough transform;
+* Whiteboard's boundaries detection: Given the detected lines, identify the best possible match for the quadrilateral shape of the whitedoard's bounderies;
+* Image's Geometry correction: Perform a 3D transformation to adjust the coordinates;
+* Luminosity correction: Color enhancement to obtain a uniform background, removing light spots.
