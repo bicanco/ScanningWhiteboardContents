@@ -41,4 +41,3 @@ def normalize(img,newMax,max,min=0):
     return newMax*((img-min)/(max-min))
 if(__name__=="__main__"):
     main()
-    # https://towardsdatascience.com/canny-edge-detection-step-by-step-in-python-computer-vision-b49c3a2d8123
