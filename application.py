@@ -24,9 +24,11 @@ def main():
     image4 = findEdges(image3,128)
     plt.figure(4)
     plt.imshow(image4,cmap="gray")
-    # image5 = HoughTransform(image4)
-    # plt.figure(5)
-    # plt.imshow(image5)
+    image5 = HoughTransform(image4,80.0,100.0)
+    image6 = HoughTransform(image4,-10.0,10.0)
+    plt.figure(5)
+    plt.imshow(image5+image6)
+    plt.colorbar()
     plt.show()
 def Luminance(image):
     return 0.299*image[:,:,0]+0.587*image[:,:,1]+0.114*image[:,:,2]
@@ -44,15 +46,16 @@ def Sobel(image):
     diagonal1 = np.array([[0,1,2],[-1,0,1],[-2,-1,0]])
     diagonal2 = np.array([[-2,-1,0],[-1,0,1],[0,1,2]])
     return convolve(image,vertical)+convolve(image,horizontal)+convolve(image,diagonal1)+convolve(image,diagonal2)
-def HoughTransform(img):
+def HoughTransform(img,minAngle=-90.0,maxAngle=90.0):
     M,N =  img.shape
     dist_max = ceil(sqrt(M*M+N*N))
-    theta = np.deg2rad(np.arange(-90.0,90.0))
+    theta = np.deg2rad(np.arange(minAngle,maxAngle))
     # dists = np.linspace(-dist_max,dist_max,dist_max*2)
     hough = np.zeros((dist_max*2,len(theta)))
     x,y = np.nonzero(img)
-    aux = np.zeros((img.shape))
-    print(aux.shape)
+    points = [[list()] * len(theta) for i in range(dist_max*2)]
+    newImage = np.zeros((img.shape))
+
     c = np.cos(theta)
     s = np.sin(theta)
     aa = dist_max*2
@@ -63,15 +66,15 @@ def HoughTransform(img):
             rho = int(round(xa*c[t] + ya*s[t]))+dist_max
             if(rho < aa):
                 hough[rho,t] += 1
-    max = hough.max()
-    for i in range(len(x)):
-        xa = x[i]
-        ya = y[i]
-        for t in range(len(theta)):
-            rho = int(round(xa*c[t] + ya*s[t]))+dist_max
-            if(rho < aa and hough[rho,t] == max):
-                aux[xa,ya] = 255
-    return aux
+                points[rho][t].append((xa,ya))
+    # max = hough.max()
+    # print(max)
+    for x in range(dist_max*2):
+        for y in range(len(theta)):
+            # if(hough[x][y] > 150):
+            for z in points[x][y]:
+                newImage[z[0]][z[1]] = hough[x][y]
+    return newImage
 def normalize(img,newMax,max,min=0):
     return newMax*((img-min)/(max-min))
 if(__name__=="__main__"):
