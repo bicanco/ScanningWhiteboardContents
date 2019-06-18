@@ -14,7 +14,7 @@ def main():
     image1 = Luminance(image)
     # plt.figure(1)
     # plt.imshow(image1,cmap="gray")
-    image2 = convolve(image1,gaussian_filter(5))
+    image2 = convolve(image1,gaussian_filter(5),'valid')
     # plt.figure(2)
     # plt.imshow(image2,cmap="gray")
     image3 = Sobel(image2)
@@ -22,12 +22,13 @@ def main():
     # plt.figure(3)
     # plt.imshow(image3,cmap="gray")
     image4 = findEdges(image3,128)
-    plt.figure(4)
-    plt.imshow(image4,cmap="gray")
-    image5 = HoughTransform(image4,80.0,100.0)
-    image6 = HoughTransform(image4,-10.0,10.0)
+    # plt.figure(4)
+    # plt.imshow(image4,cmap="gray")
+    image5 = HoughTransform(image4,70.0,110.0)
+    image6 = HoughTransform(image4,-20.0,20.0)
+    image7 = image5+image6
     plt.figure(5)
-    plt.imshow(image5+image6)
+    plt.imshow(np.where(image7!=0,255,0))
     plt.colorbar()
     plt.show()
 def Luminance(image):
@@ -45,7 +46,7 @@ def Sobel(image):
     horizontal = np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
     diagonal1 = np.array([[0,1,2],[-1,0,1],[-2,-1,0]])
     diagonal2 = np.array([[-2,-1,0],[-1,0,1],[0,1,2]])
-    return convolve(image,vertical)+convolve(image,horizontal)+convolve(image,diagonal1)+convolve(image,diagonal2)
+    return convolve(image,vertical,'valid')+convolve(image,horizontal,'valid')#+convolve(image,diagonal1,'valid')+convolve(image,diagonal2,'valid')
 def HoughTransform(img,minAngle=-90.0,maxAngle=90.0):
     M,N =  img.shape
     dist_max = ceil(sqrt(M*M+N*N))
@@ -72,12 +73,12 @@ def HoughTransform(img,minAngle=-90.0,maxAngle=90.0):
         for y in range(len(theta)):
             if(hough[x][y] in max):
                 for z in points[x][y]:
-                    newImage[z[0]][z[1]] = hough[x][y]
+                    newImage[z[0]][z[1]] = 255
     return newImage
-def maxPoints(hough, n=6):
+def maxPoints(hough, n=5):
     flat = hough.flatten()
     flat = np.flip(np.sort(flat))
-   
+
     max = []
     for i in range(n):
         max.append(flat[0])
