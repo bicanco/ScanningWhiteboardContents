@@ -67,14 +67,25 @@ def HoughTransform(img,minAngle=-90.0,maxAngle=90.0):
             if(rho < aa):
                 hough[rho,t] += 1
                 points[rho][t].append((xa,ya))
-    # max = hough.max()
-    # print(max)
+    max = maxPoints(hough)
     for x in range(dist_max*2):
         for y in range(len(theta)):
-            # if(hough[x][y] > 150):
-            for z in points[x][y]:
-                newImage[z[0]][z[1]] = hough[x][y]
+            if(hough[x][y] in max):
+                for z in points[x][y]:
+                    newImage[z[0]][z[1]] = hough[x][y]
     return newImage
+def maxPoints(hough, n=6):
+    flat = hough.flatten()
+    flat = np.flip(np.sort(flat))
+   
+    max = []
+    for i in range(n):
+        max.append(flat[0])
+        idx = np.argwhere(flat==flat[0])
+        flat = np.delete(flat, idx)
+
+    return max
+
 def normalize(img,newMax,max,min=0):
     return newMax*((img-min)/(max-min))
 if(__name__=="__main__"):
