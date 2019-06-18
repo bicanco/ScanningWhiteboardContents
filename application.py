@@ -5,6 +5,7 @@ from scipy.signal import convolve
 from math import *
 import cv2
 import math
+import cv2 
 
 def main():
     file = str(input("File location:")).rstrip()
@@ -24,9 +25,10 @@ def main():
     # image4 = findEdges(image3,128)
     # plt.figure(4)
     # plt.imshow(image4,cmap="gray")
-    # image5 = HoughTransform(image4,70.0,110.0)
-    # image6 = HoughTransform(image4,-20.0,20.0)
-    # image7 = image5+image6
+    image5 = HoughTransform(image4,70.0,110.0)
+    image6 = HoughTransform(image4,-20.0,20.0)
+    image7 = image5+image6
+    edges = getQuadrangle(image7)
     plt.figure(5)
     # plt.imshow(np.where(image7!=0,255,0))
     # plt.colorbar()
@@ -88,6 +90,9 @@ def maxPoints(hough, n=5):
         flat = np.delete(flat, idx)
 
     return max
+def getQuadrangle(img):
+    img = np.where(img > 0, 1, 0).astype('uint8')
+    img, contours = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 def distortionCorrection(img,corners):
     M,N,_ = img.shape
     aux,b = cv2.findHomography(corners,np.array(((0,0),(N,0),(N,M),(0,M))))
