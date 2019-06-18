@@ -3,33 +3,35 @@ import matplotlib.pyplot as plt
 import imageio as iio
 from scipy.signal import convolve
 from math import *
+import cv2
 import math
-
 
 def main():
     file = str(input("File location:")).rstrip()
     image = iio.imread(file)
-    # plt.figure(0)
-    # plt.imshow(image,cmap="gray")
-    image1 = Luminance(image)
+    plt.figure(0)
+    plt.imshow(image,cmap="gray")
+    # image1 = Luminance(image)
     # plt.figure(1)
     # plt.imshow(image1,cmap="gray")
-    image2 = convolve(image1,gaussian_filter(5),'valid')
+    # image2 = convolve(image1,gaussian_filter(5),'valid')
     # plt.figure(2)
     # plt.imshow(image2,cmap="gray")
-    image3 = Sobel(image2)
-    image3 = normalize(image3,255,image3.max(),image3.min())
+    # image3 = Sobel(image2)
+    # image3 = normalize(image3,255,image3.max(),image3.min())
     # plt.figure(3)
     # plt.imshow(image3,cmap="gray")
-    image4 = findEdges(image3,128)
+    # image4 = findEdges(image3,128)
     # plt.figure(4)
     # plt.imshow(image4,cmap="gray")
-    image5 = HoughTransform(image4,70.0,110.0)
-    image6 = HoughTransform(image4,-20.0,20.0)
-    image7 = image5+image6
+    # image5 = HoughTransform(image4,70.0,110.0)
+    # image6 = HoughTransform(image4,-20.0,20.0)
+    # image7 = image5+image6
     plt.figure(5)
-    plt.imshow(np.where(image7!=0,255,0))
-    plt.colorbar()
+    # plt.imshow(np.where(image7!=0,255,0))
+    # plt.colorbar()
+    a = distortionCorrection(image,np.array(((102,128),(532,110),(553,428),(100,404))))
+    plt.imshow(a)
     plt.show()
 def Luminance(image):
     return 0.299*image[:,:,0]+0.587*image[:,:,1]+0.114*image[:,:,2]
@@ -86,7 +88,10 @@ def maxPoints(hough, n=5):
         flat = np.delete(flat, idx)
 
     return max
-
+def distortionCorrection(img,corners):
+    M,N,_ = img.shape
+    aux,b = cv2.findHomography(corners,np.array(((0,0),(N,0),(N,M),(0,M))))
+    return cv2.warpPerspective(img,aux,(N,M))
 def normalize(img,newMax,max,min=0):
     return newMax*((img-min)/(max-min))
 if(__name__=="__main__"):
