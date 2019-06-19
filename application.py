@@ -5,35 +5,35 @@ from scipy.signal import convolve
 from math import *
 import cv2
 import math
-import cv2 
+import cv2
 
 def main():
     file = str(input("File location:")).rstrip()
     image = iio.imread(file)
-    plt.figure(0)
+    plt.figure("Original image")
     plt.imshow(image,cmap="gray")
-    # image1 = Luminance(image)
-    # plt.figure(1)
-    # plt.imshow(image1,cmap="gray")
-    # image2 = convolve(image1,gaussian_filter(5),'valid')
-    # plt.figure(2)
-    # plt.imshow(image2,cmap="gray")
-    # image3 = Sobel(image2)
-    # image3 = normalize(image3,255,image3.max(),image3.min())
-    # plt.figure(3)
-    # plt.imshow(image3,cmap="gray")
-    # image4 = findEdges(image3,128)
-    # plt.figure(4)
-    # plt.imshow(image4,cmap="gray")
+    image1 = Luminance(image)
+    plt.figure("Gray level image")
+    plt.imshow(image1,cmap="gray")
+    image2 = convolve(image1,gaussian_filter(5),'valid')
+    plt.figure("Removing noise")
+    plt.imshow(image2,cmap="gray")
+    image3 = Sobel(image2)
+    image3 = normalize(image3,255,image3.max(),image3.min())
+    plt.figure("Edges")
+    plt.imshow(image3,cmap="gray")
+    image4 = findEdges(image3,128)
+    plt.figure("Threshhold filter")
+    plt.imshow(image4,cmap="gray")
     image5 = HoughTransform(image4,70.0,110.0)
     image6 = HoughTransform(image4,-20.0,20.0)
     image7 = image5+image6
-    edges = getQuadrangle(image7)
-    plt.figure(5)
-    # plt.imshow(np.where(image7!=0,255,0))
-    # plt.colorbar()
-    a = distortionCorrection(image,np.array(((102,128),(532,110),(553,428),(100,404))))
-    plt.imshow(a)
+    # edges = getQuadrangle(image7)
+    plt.figure("Hough Transform")
+    plt.imshow(np.where(image7!=0,255,0),cmap="gray")
+    plt.figure("Distortion Correction")
+    image8 = distortionCorrection(image,np.array(((102,128),(532,110),(553,428),(100,404))))
+    plt.imshow(image8)
     plt.show()
 def Luminance(image):
     return 0.299*image[:,:,0]+0.587*image[:,:,1]+0.114*image[:,:,2]
