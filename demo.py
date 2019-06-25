@@ -5,10 +5,10 @@ from scipy.signal import convolve
 from math import *
 import cv2
 
-# main function
-def main():
+# demo function
+def demo():
     # reading local of input image
-    file = str(input("File Location:\n")).rstrip()
+    file = "images/whiteboard01.png"
     # reading input image
     image = iio.imread(file)
     # trasnforming in gray level image
@@ -32,18 +32,15 @@ def main():
     # printing found edges
     print("number of points in the edges found:",len(edges),sep='\n')
 
-    plt.figure("Take note of the vertices of the whiteboard")
-    plt.imshow(image)
-    plt.show()
     # getting vertices to correct distorction, due to not being able to successfuly getting correct vertices
-    v1x = int(input("Superior left whitboard vertex x coordenate:\n"))
-    v1y = int(input("Superior left whitboard vertex y coordenate:\n"))
-    v2x = int(input("Superior right whitboard vertex x coordenate:\n"))
-    v2y = int(input("Superior right whitboard vertex y coordenate:\n"))
-    v3x = int(input("Inferior right whitboard vertex x coordenate:\n"))
-    v3y = int(input("Inferior right whitboard vertex y coordenate:\n"))
-    v4x = int(input("Inferior left whitboard vertex x coordenate:\n"))
-    v4y = int(input("Inferior left whitboard vertex y coordenate:\n"))
+    v1x = 102
+    v1y = 128
+    v2x = 532
+    v2y = 110
+    v3x = 553
+    v3y = 428
+    v4x = 100
+    v4y = 404
 
     # correcting distortion
     image8 = distortionCorrection(image,np.array(((v1x,v1y),(v2x,v2y),(v3x,v3y),(v4x,v4y))))
@@ -234,6 +231,6 @@ def illuminationCorretion(img):
 def normalize(img,newMax,max,min=0):
     return newMax*((img-min)/(max-min))
 
-# calling the main function
+# calling the demo function
 if(__name__=="__main__"):
-    main()
+    demo()
